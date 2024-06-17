@@ -13,10 +13,10 @@ wx.cloud.init({
   //   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
   //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
   //   如不填则使用默认环境（第一个创建的环境）
-  // env: 'my-env-id',
+  // env: '',
 })
-const db = wx.cloud.database()
 
+const db = wx.cloud.database()
 /**
  * 游戏主函数
  */
@@ -27,7 +27,7 @@ export default class Main {
     this.personalHighScore = null
 
     this.restart()
-    this.login()
+    // this.login()
   }
 
   login() {
@@ -70,7 +70,7 @@ export default class Main {
       this.touchHandler
     )
 
-    this.bg       = new BackGround(ctx)
+    this.bg       = new BackGround(ctx, db)
     this.player   = new Player(ctx)
     this.gameinfo = new GameInfo()
     this.music    = new Music()
@@ -180,36 +180,8 @@ export default class Main {
 
     this.bg.render(ctx)
 
-    databus.bullets
-          .concat(databus.enemys)
-          .forEach((item) => {
-              item.drawToCanvas(ctx)
-            })
 
-    this.player.drawToCanvas(ctx)
 
-    databus.animations.forEach((ani) => {
-      if ( ani.isPlaying ) {
-        ani.aniRender(ctx)
-      }
-    })
-
-    this.gameinfo.renderGameScore(ctx, databus.score)
-
-    // 游戏结束停止帧循环
-    if ( databus.gameOver ) {
-      this.gameinfo.renderGameOver(
-        ctx, 
-        databus.score,
-        this.personalHighScore
-      )
-
-      if ( !this.hasEventBind ) {
-        this.hasEventBind = true
-        this.touchHandler = this.touchEventHandler.bind(this)
-        canvas.addEventListener('touchstart', this.touchHandler)
-      }
-    }
   }
 
   // 游戏逻辑更新主函数
@@ -239,12 +211,12 @@ export default class Main {
   loop() {
     databus.frame++
 
-    this.update()
+    // this.update()
     this.render()
 
-    this.aniId = window.requestAnimationFrame(
-      this.bindLoop,
-      canvas
-    )
+    // this.aniId = window.requestAnimationFrame(
+    //   this.bindLoop,
+    //   canvas
+    // )
   }
 }
